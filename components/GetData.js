@@ -2,6 +2,7 @@ import React from 'react'
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import axios from 'axios';
+var _ = require('lodash');
 
 export default class GetData extends React.Component {
 
@@ -12,7 +13,7 @@ export default class GetData extends React.Component {
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         axios.get('http://localhost:8083?q=' + this.props.queryTerm)
             .then(response => {
                 this.setState({queryResults: response.data});
@@ -24,15 +25,16 @@ export default class GetData extends React.Component {
     }
 
     render() {
-        const listItems = Object.keys(this.state.queryResults).map((url) => {
+        const query_results = _.toPairs(this.state.queryResults);
+        const data = _.sortBy(query_results, [(result) => -result[1]]);
+        const listItems = data.map((result) => {
             return (
                 <div>
-                    <ListItem primaryText={url}
-                              secondaryText={this.state.queryResults[url]}/>
+                    <ListItem primaryText={result[0]}
+                              secondaryText={result[1]}/>
                 </div>
             )
         });
-
         return (
             <List>{listItems}</List>
         );
