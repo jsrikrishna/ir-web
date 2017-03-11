@@ -22,12 +22,26 @@ export default class Query extends React.Component {
         };
     }
 
+    onEnterKey = (event) => {
+        if (event.key === 'Enter' && this.state.query) {
+            this.setState({
+                isData: true
+            });
+        }
+    };
+
     handleChange = (event) => {
-        console.log(event.target.value);
-        this.setState({
-            query: event.target.value,
-            isData: event.target.value != ''
-        });
+        if(event.target.value){
+            this.setState({
+                query: event.target.value,
+                isData: false
+            })
+        } else {
+            this.setState({
+                query: event.target.value
+            })
+        }
+
     };
 
     render() {
@@ -41,6 +55,7 @@ export default class Query extends React.Component {
                         <TextField id="query-field"
                                    hintText={this.state.hintText}
                                    value={this.state.query}
+                                   onKeyPress={this.onEnterKey}
                                    onChange={this.handleChange}
                                    fullWidth={true}
                                    underlineStyle={styles.underlineStyle}

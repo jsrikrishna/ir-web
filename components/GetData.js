@@ -1,27 +1,41 @@
 import React from 'react'
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-
+import axios from 'axios';
 
 export default class GetData extends React.Component {
 
-    getData(queryTerm) {
-        const urls = [1, 2, 3, 4, 5, 6, 7,1, 2, 3, 4, 5, 6, 7];
-        const listItems = urls.map((url) => {
-            return (
-                <div>
-                    <ListItem primaryText={queryTerm + url}
-                              secondaryText="Hello this the secondary text"/>
-                </div>
-            )
-        });
-        return (
-            <List>{listItems}</List>
-        )
+    constructor(props) {
+        super(props);
+        this.state = {
+            queryResults: {}
+        }
+    }
+
+    componentDidMount(){
+        axios.get('http://localhost:8083?q=' + this.props.queryTerm)
+            .then(response => {
+                this.setState({queryResults: response.data});
+                this.forceUpdate();
+            })
+            .catch(response => {
+                console.log('Error Occurred ' + response)
+            })
     }
 
     render() {
-        return this.getData(this.props.queryTerm);
+        const listItems = Object.keys(this.state.queryResults).map((url) => {
+            return (
+                <div>
+                    <ListItem primaryText={url}
+                              secondaryText={this.state.queryResults[url]}/>
+                </div>
+            )
+        });
+
+        return (
+            <List>{listItems}</List>
+        );
     }
 }
 
