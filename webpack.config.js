@@ -11,7 +11,7 @@ module.exports = {
         // current directory. This technically isn't false since it's an absolute
         // path, but the use of `__dirname` isn't necessary.
         contentBase: __dirname + '/static',
-        port: 8081
+        port: 8085
     },
 
 
